@@ -1,12 +1,20 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { SimulateModule } from './simulate/simulate.module';
+import { ConfigurableModuleBuilder, Module } from '@nestjs/common';
 import { SimulationModule } from './simulation/simulation.module';
+import { ConfigModule } from '@nestjs/config';
+import * as Joi from 'joi';
 
 @Module({
-  imports: [SimulateModule, SimulationModule],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    SimulationModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+      validationSchema: Joi.object({
+        PORT: Joi.string().required(),
+        SWAGGER_URI: Joi.string().required(),
+      }),
+    }),
+  ],
+  providers: [],
 })
 export class AppModule {}
