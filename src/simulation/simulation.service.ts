@@ -3,15 +3,12 @@ import { chargingDemands, evArrivalProbabilities } from './data';
 import { IChargePoint, SimulationResultDto } from './types';
 
 @Injectable()
-export class SimulationService implements OnModuleInit {
+export class SimulationService {
   private NUM_CHARGE_POINTS: number = 20;
   private TOTAL_INTERVALS: number = 35040;
   private POWER_KW: number = 11;
 
-  onModuleInit() {
-    this.runSimulation();
-  }
-
+  
   /**
    * Runs the simulation for one year and calculates the total energy consumed, maximum power demand, and concurrency factor.
    * @returns An object containing the results of the simulation.
