@@ -1,33 +1,51 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { SimulationApiService } from './simulation-api.service';
-import { CreateSimulationApiDto } from './dto/create-simulation-api.dto';
-import { UpdateSimulationApiDto } from './dto/update-simulation-api.dto';
+import { SimulationInputDto, UpdateSimulationApiDto } from '../common/dto/simulation.request.dto';
+import { ApiOkResponse, ApiOperation, ApiResponse, ApiTags,  } from '@nestjs/swagger';
+import { SimulationResponseDto } from '../common/dto/simulation.response.dto';
+import { SimulationInputDocument } from './schemas/simulation-input.schema';
+import { SimulationOutput } from './schemas/simulation-output.schema';
 
+@ApiTags('Simulation API')
 @Controller('simulation-api')
 export class SimulationApiController {
   constructor(private readonly simulationApiService: SimulationApiService) {}
 
-  @Post()
-  create(@Body() createSimulationApiDto: CreateSimulationApiDto) {
+  @Post('/create')
+  @ApiOperation({ summary: 'Run simulation with dynamic input parameters' })
+  create(@Body() createSimulationApiDto: SimulationInputDto): Promise<SimulationResponseDto> {
     return this.simulationApiService.create(createSimulationApiDto);
   }
 
-  @Get()
-  findAll() {
+  @Get('/all')
+  @ApiOperation({ summary: 'Get all simulation inputs' })
+  findAll(): Promise<SimulationOutput[]> {
     return this.simulationApiService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  @ApiOperation({ summary: 'Get a simulation input by Id' })
+  @ApiOkResponse({
+    type: SimulationResponseDto,
+  })
+  findOne(@Param('id') id: string): Promise<SimulationInputDocument> {
     return this.simulationApiService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSimulationApiDto: UpdateSimulationApiDto) {
+  @ApiOperation({ summary: 'Update a simulation input by Id ' })
+  @ApiOkResponse({
+    type: SimulationResponseDto,
+  })
+  update(
+    @Param('id') id: string,
+    @Body() updateSimulationApiDto: UpdateSimulationApiDto
+  ): Promise<SimulationInputDocument> {
     return this.simulationApiService.update(id, updateSimulationApiDto);
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete a simulation input by Id' })
   remove(@Param('id') id: string) {
     return this.simulationApiService.remove(id);
   }

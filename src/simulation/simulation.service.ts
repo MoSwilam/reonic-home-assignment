@@ -1,19 +1,36 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { chargingDemands, evArrivalProbabilities } from './data';
 import { IChargePoint, SimulationResultDto } from './types';
+import { SimulationOutput } from 'src/simulation-api/schemas/simulation-output.schema';
+import { SimulationInputDto } from 'src/common/dto/simulation.request.dto';
 
 @Injectable()
 export class SimulationService {
   private NUM_CHARGE_POINTS: number = 20;
   private TOTAL_INTERVALS: number = 35040;
-  private POWER_KW: number = 11;
+  private CHARGE_POWER_KW: number = 11;
 
   
+  getDefaultSimulationOptions() {
+    const initChargePoint = {
+      occupied: false,
+      energyNeeded: 0,
+    }
+    
+    return {
+      numberOfChargePoints: this.NUM_CHARGE_POINTS,
+      totalInterval: this.TOTAL_INTERVALS,
+      powerKw: this.CHARGE_POWER_KW,
+      chargePoints: Array.from({ length: 20 }, () => initChargePoint),
+    };
+  }
+
+
   /**
    * Runs the simulation for one year and calculates the total energy consumed, maximum power demand, and concurrency factor.
-   * @returns An object containing the results of the simulation.
+   * @returns An object containing the outputs of the simulation.
    */
-  runSimulation(): SimulationResultDto {
+  runSimulation(payload?: SimulationInputDto): Omit<SimulationOutput, '_id'> {
     let totalEnergyConsumed = 0;
     let maxPowerDemand = 0; // Track the highest power demand at any interval
     let totalPowerDemand = 0; // To calculate average power demand
@@ -26,9 +43,11 @@ export class SimulationService {
     const oneYear15MinutesInterval = this.TOTAL_INTERVALS; // Total intervals in a year
     const intervalDurationHours = 0.25; // 15 minutes in hours
 
+    // Iterate over each 15-minute interval in a year
     for (let i = 0; i < oneYear15MinutesInterval; i++) {
       let intervalPowerDemand = 0;
 
+      // Iterate over each chargepoint
       for (const chargepoint of chargepoints) {
         // Simulating the arrival of an EV
         const arrivalProbability: number = this.getArrivalProbability(i);
@@ -42,9 +61,9 @@ export class SimulationService {
         // Simulating the charging process
         if (chargepoint.occupied) {
           const energyProvidedThisInterval: number =
-            this.POWER_KW * intervalDurationHours; // Each chargepoint delivers 11 kW, and each interval is 0.25 hours
+            this.CHARGE_POWER_KW * intervalDurationHours; // Each chargepoint delivers 11 kW, and each interval is 0.25 hours
           chargepoint.energyNeeded -= energyProvidedThisInterval;
-          intervalPowerDemand += this.POWER_KW;
+          intervalPowerDemand += this.CHARGE_POWER_KW;
 
           // Check if charging is complete
           if (chargepoint.energyNeeded <= 0) {
@@ -62,21 +81,20 @@ export class SimulationService {
     }
 
     const theoriticalMaxPowerDemand: number =
-      this.POWER_KW * this.NUM_CHARGE_POINTS;
+      this.CHARGE_POWER_KW * this.NUM_CHARGE_POINTS;
     const averagePowerDemand: number =
       totalPowerDemand / oneYear15MinutesInterval;
     const concurrencyFactor: number =
       averagePowerDemand / theoriticalMaxPowerDemand;
 
-    const result: SimulationResultDto = {
+    const output: SimulationResultDto = {
       theoriticalMaxPowerDemand,
-      actualMaxDemand: maxPowerDemand,
+      actualMaxPowerDemand: maxPowerDemand,
       totalEnergyConsumed: +totalEnergyConsumed.toFixed(),
       concurrencyFactor: +concurrencyFactor.toFixed(2),
     };
 
-    console.log(result);
-    return result;
+    return output;
   }
 
   /**

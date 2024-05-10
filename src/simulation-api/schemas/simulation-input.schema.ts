@@ -1,11 +1,12 @@
-// results.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
+import { AbstractDocument } from 'src/common/abstract.schema';
+import { SimulationOutput } from './simulation-output.schema';
 
 export type SimulationInputDocument = SimulationInput & Document;
 
-@Schema()
-export class SimulationInput {
+@Schema({ timestamps: true, versionKey: false, collection: SimulationInput.name})
+export class SimulationInput extends AbstractDocument {
   @Prop({ required: true })
   numberOfChargePoints: number;
 
@@ -17,6 +18,9 @@ export class SimulationInput {
 
   @Prop({ default: 11 })
   chargingPowerPerPoint: number;
+
+  @Prop({ type: Types.ObjectId, ref: SimulationOutput.name, required: false })
+  output: SimulationOutput;
 }
 
 export const SimulationInputSchema = SchemaFactory.createForClass(SimulationInput);

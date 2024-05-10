@@ -3,22 +3,10 @@ export interface IChargePoint {
   energyNeeded: number;
 }
 
-export interface IMeasurement {
-  value: number;
-  unit: string;
-}
-
 export enum IMeasurementUnit {
   KW = 'KW',
   KWH = 'KWH',
   PERCENT = '%',
-}
-
-export interface ISimulationResult {
-  theoriticalMaxPowerDemand: IMeasurement;
-  actualMaxDemand: IMeasurement;
-  averagePowerDemand: IMeasurement;
-  concurrencyFactor: IMeasurement;
 }
 
 export interface ITimeInterval {
@@ -33,7 +21,7 @@ export interface IChargingDemand {
 
 export interface SimulationResultDto {
   theoriticalMaxPowerDemand: number;
-  actualMaxDemand: number;
+  actualMaxPowerDemand: number;
   concurrencyFactor: number;
   totalEnergyConsumed: number;
 }
