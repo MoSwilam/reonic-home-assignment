@@ -1,7 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { SimulationApiService } from './simulation-api.service';
-import { SimulationInputDto, UpdateSimulationApiDto } from '../common/dto/simulation.request.dto';
-import { ApiOkResponse, ApiOperation, ApiResponse, ApiTags,  } from '@nestjs/swagger';
+import {
+  SimulationInputDto,
+  UpdateSimulationApiDto,
+} from '../common/dto/simulation.request.dto';
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { SimulationResponseDto } from '../common/dto/simulation.response.dto';
 import { SimulationInputDocument } from './schemas/simulation-input.schema';
 import { SimulationOutput } from './schemas/simulation-output.schema';
@@ -12,8 +28,10 @@ export class SimulationApiController {
   constructor(private readonly simulationApiService: SimulationApiService) {}
 
   @Post('/create')
-  @ApiOperation({ summary: 'Run simulation with dynamic input parameters' })
-  create(@Body() createSimulationApiDto: SimulationInputDto): Promise<SimulationResponseDto> {
+  @ApiOperation({ summary: 'Run simulation with custom input parameters' })
+  create(
+    @Body() createSimulationApiDto: SimulationInputDto,
+  ): Promise<SimulationResponseDto> {
     return this.simulationApiService.create(createSimulationApiDto);
   }
 
@@ -29,7 +47,7 @@ export class SimulationApiController {
     type: SimulationResponseDto,
   })
   findOne(@Param('id') id: string): Promise<SimulationInputDocument> {
-    return this.simulationApiService.findOne(id);
+    return this.simulationApiService.findByIdOrThrow(id);
   }
 
   @Patch(':id')
@@ -39,7 +57,7 @@ export class SimulationApiController {
   })
   update(
     @Param('id') id: string,
-    @Body() updateSimulationApiDto: UpdateSimulationApiDto
+    @Body() updateSimulationApiDto: UpdateSimulationApiDto,
   ): Promise<SimulationInputDocument> {
     return this.simulationApiService.update(id, updateSimulationApiDto);
   }

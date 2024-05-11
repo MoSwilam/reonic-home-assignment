@@ -20,8 +20,17 @@ export interface IChargingDemand {
 }
 
 export interface SimulationResultDto {
-  theoriticalMaxPowerDemand: number;
-  actualMaxPowerDemand: number;
-  concurrencyFactor: number;
-  totalEnergyConsumed: number;
+  theoriticalMaxPowerDemand: string;
+  actualMaxPowerDemand: string;
+  concurrencyFactor: string;
+  totalEnergyConsumed: string;
+}
+
+export interface SimulationOptions {
+  numberOfChargePoints: number;
+  arrivalProbabilityMultiplier?: number; // deafult 1
+  evConsumptionKwhPer100Km: number; // default 15
+  chargingPowerPerChargePointKw: number;
+  numberOfIntevals: number;
+  intervalDurationHours: number;
 }

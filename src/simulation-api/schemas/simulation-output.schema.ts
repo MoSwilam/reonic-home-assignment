@@ -5,19 +5,24 @@ import { AbstractDocument } from 'src/common/abstract.schema';
 
 export type SimulationOutputDocument = SimulationOutput & Document;
 
-@Schema({ timestamps: true, versionKey: false, collection: SimulationOutput.name })
+@Schema({
+  timestamps: true,
+  versionKey: false,
+  collection: SimulationOutput.name,
+})
 export class SimulationOutput extends AbstractDocument {
   @Prop()
-  theoriticalMaxPowerDemand: number;
-  
-  @Prop()
-  actualMaxPowerDemand: number;
+  theoriticalMaxPowerDemand: string;
 
   @Prop()
-  totalEnergyConsumed: number;
+  actualMaxPowerDemand: string;
 
   @Prop()
-  concurrencyFactor: number;
+  totalEnergyConsumed: string;
+
+  @Prop()
+  concurrencyFactor: string;
 }
 
-export const SimulationOutputSchema = SchemaFactory.createForClass(SimulationOutput);
+export const SimulationOutputSchema =
+  SchemaFactory.createForClass(SimulationOutput);

@@ -11,13 +11,12 @@ async function bootstrap() {
   const options = new DocumentBuilder()
     .addBearerAuth()
     .setTitle('Reonic Simulation API')
-    .setDescription('Sleepr Auth API documentation')
+    .setDescription('Reonic Simulation API documentation')
     .setVersion('1.0')
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup(`${process.env.SWAGGER_URI}`, app, document);
-
 
   await app.listen(port);
   console.log(
