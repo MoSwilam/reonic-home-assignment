@@ -20,7 +20,7 @@ async function bootstrap() {
 
   await app.listen(port);
   console.log(
-    `-------- Reonic simulation API is running on port: ${port} ---------`,
+    `-------- Reonic simulation APP is running on port: ${port} ---------`,
   );
 }
 bootstrap();

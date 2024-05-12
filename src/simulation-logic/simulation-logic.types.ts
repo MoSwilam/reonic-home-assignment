@@ -20,10 +20,10 @@ export interface IChargingDemand {
 }
 
 export interface SimulationResultDto {
-  theoriticalMaxPowerDemand: string;
-  actualMaxPowerDemand: string;
-  concurrencyFactor: string;
-  totalEnergyConsumed: string;
+  theoriticalMaxPowerDemand: number;
+  actualMaxPowerDemand: number;
+  concurrencyFactor: number;
+  totalEnergyConsumed: number;
 }
 
 export interface SimulationOptions {

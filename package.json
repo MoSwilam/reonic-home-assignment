@@ -1,7 +1,7 @@
 {
   "name": "reonic",
   "version": "0.0.1",
-  "description": "Reonic home assignment",
+  "description": "Reonic simulation API",
   "author": "Mo Swilam",
   "private": true,
   "license": "UNLICENSED",

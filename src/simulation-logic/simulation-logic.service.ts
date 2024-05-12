@@ -1,11 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { chargingDemands, evArrivalProbabilities } from './data';
-import { IChargePoint, SimulationOptions, SimulationResultDto } from './types';
+import { IChargePoint, SimulationOptions, SimulationResultDto } from './simulation-logic.types';
 import { SimulationOutput } from 'src/simulation-api/schemas/simulation-output.schema';
 import { SimulationInputDto } from 'src/common/dto/simulation.request.dto';
 
 @Injectable()
-export class SimulationService {
+export class SimulationLogicService {
   private defaultNumberOfChargePoints: number = 20;
   private deafultTotalIntervals: number = 35040; // 15 minutes intervals in a year
   private defaultPowerPerChargePointKw: number = 11;
@@ -50,6 +50,8 @@ export class SimulationService {
       intervalDurationHours,
       numberOfIntevals: oneYear15MinutesInterval, // renaming for clarity
     } = this.validateAndGetSimulationOptions(payload);
+
+    const arrivalProbability = this.getArrivalProbability(200, payload);
 
     let totalEnergyConsumed = 0;
     let maxPowerDemand = 0; // To track the highest power demand at any interval
@@ -117,10 +119,10 @@ export class SimulationService {
     ).toFixed(2);
 
     const output: SimulationResultDto = {
-      theoriticalMaxPowerDemand: `${theoriticalMaxPowerDemand}KW`,
-      actualMaxPowerDemand: `${maxPowerDemand}KW`,
-      totalEnergyConsumed: `${totalEnergyConsumed}KWH`,
-      concurrencyFactor: `${concurrencyFactor * 100}%`,
+      theoriticalMaxPowerDemand: theoriticalMaxPowerDemand,
+      actualMaxPowerDemand: maxPowerDemand,
+      totalEnergyConsumed: totalEnergyConsumed,
+      concurrencyFactor: concurrencyFactor,
     };
 
     return output;
@@ -192,6 +194,8 @@ export class SimulationService {
     } else {
       arrivalProbability = this.getArrivalProbabilityBasedOnData(intervalIndex);
     }
+
+
 
     return arrivalProbability;
   }

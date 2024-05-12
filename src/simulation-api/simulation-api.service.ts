@@ -3,7 +3,7 @@ import { SimulationInput, SimulationInputDocument } from './schemas/simulation-i
 import { SimulationInputDto, UpdateSimulationApiDto } from '../common/dto/simulation.request.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { SimulationService } from 'src/simulation/simulation.service';
+import { SimulationLogicService } from 'src/simulation-logic/simulation-logic.service';
 import { SimulationResponseDto } from '../common/dto/simulation.response.dto';
 import { SimulationOutput, SimulationOutputDocument } from './schemas/simulation-output.schema';
 
@@ -14,7 +14,7 @@ export class SimulationApiService {
     private simulationInputModel: Model<SimulationInputDocument>,
     @InjectModel(SimulationOutput.name)
     private simulationOutputModel: Model<SimulationOutputDocument>,
-    private simulationService: SimulationService,
+    private simulationService: SimulationLogicService,
   ) {}
 
   async create(payload: SimulationInputDto): Promise<SimulationResponseDto> {

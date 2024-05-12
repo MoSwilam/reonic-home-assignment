@@ -15,7 +15,6 @@ import {
 import {
   ApiOkResponse,
   ApiOperation,
-  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { SimulationResponseDto } from '../common/dto/simulation.response.dto';
@@ -23,7 +22,7 @@ import { SimulationInputDocument } from './schemas/simulation-input.schema';
 import { SimulationOutput } from './schemas/simulation-output.schema';
 
 @ApiTags('Simulation API')
-@Controller('simulation-api')
+@Controller('api/simulation')
 export class SimulationApiController {
   constructor(private readonly simulationApiService: SimulationApiService) {}
 

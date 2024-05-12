@@ -12,16 +12,16 @@ export type SimulationOutputDocument = SimulationOutput & Document;
 })
 export class SimulationOutput extends AbstractDocument {
   @Prop()
-  theoriticalMaxPowerDemand: string;
+  theoriticalMaxPowerDemand: number;
 
   @Prop()
-  actualMaxPowerDemand: string;
+  actualMaxPowerDemand: number;
 
   @Prop()
-  totalEnergyConsumed: string;
+  totalEnergyConsumed: number;
 
   @Prop()
-  concurrencyFactor: string;
+  concurrencyFactor: number;
 }
 
 export const SimulationOutputSchema =
