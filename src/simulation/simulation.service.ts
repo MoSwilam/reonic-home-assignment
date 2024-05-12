@@ -12,7 +12,7 @@ export class SimulationService {
   private defaultIntervalDurationHours: number = 0.25;
   private defaultEvConsumptionKwhPer100Km: number = 18;
 
-  getSimulationOptions(payload: SimulationInputDto): SimulationOptions {
+  validateAndGetSimulationOptions(payload: SimulationInputDto): SimulationOptions {
     if (!payload || Object.keys(payload).length === 0) {
       return {
         numberOfChargePoints: this.defaultNumberOfChargePoints,
@@ -49,12 +49,13 @@ export class SimulationService {
       chargingPowerPerChargePointKw,
       intervalDurationHours,
       numberOfIntevals: oneYear15MinutesInterval, // renaming for clarity
-    } = this.getSimulationOptions(payload);
+    } = this.validateAndGetSimulationOptions(payload);
 
     let totalEnergyConsumed = 0;
     let maxPowerDemand = 0; // To track the highest power demand at any interval
     let totalPowerDemand = 0; // To calculate average power demand
 
+    /** init chargingPoints */
     const chargepoints: IChargePoint[] = Array.from(
       { length: numberOfChargePoints },
       () => ({
@@ -65,17 +66,16 @@ export class SimulationService {
 
     for (let i = 0; i < oneYear15MinutesInterval; i++) {
       let intervalPowerDemand = 0;
-
       for (const chargepoint of chargepoints) {
         const arrivalProbability: number = this.getArrivalProbability(i, payload);
         
-        // Simulating the arrival of an EV
+        /** Simulating the arrival of an EV */
         if (!chargepoint.occupied && Math.random() < arrivalProbability) {
           chargepoint.occupied = true;
           const chargingDemand = this.selectChargingDemandBasedOnProbability();
           const kmRange = chargingDemand;
 
-          // Convert km range to energy needed in kWh
+          /** Convert km range to energy needed in kWh */
           chargepoint.energyNeeded = +(
             (kmRange / 100) *
             evConsumptionKwhPer100Km
@@ -83,7 +83,7 @@ export class SimulationService {
         }
 
 
-        // Simulating the charging process
+        /** Simulating the charging process */
         if (chargepoint.occupied) {
           const energyProvidedThisInterval: number =
             chargingPowerPerChargePointKw * intervalDurationHours;
@@ -91,13 +91,13 @@ export class SimulationService {
           chargepoint.energyNeeded -= energyProvidedThisInterval;
           intervalPowerDemand += chargingPowerPerChargePointKw;
 
-          // Check if charging is complete
+          /** Check if charging is complete */
           if (chargepoint.energyNeeded <= 0) {
             chargepoint.occupied = false;
           }
         }
 
-        // Calculate the total energy consumed and the maximum power demand
+        /** Calculate the total energy consumed and the maximum power demand */
         totalEnergyConsumed += intervalPowerDemand * intervalDurationHours;
         totalPowerDemand += intervalPowerDemand;
         if (intervalPowerDemand > maxPowerDemand) {
@@ -113,7 +113,7 @@ export class SimulationService {
       totalPowerDemand / oneYear15MinutesInterval;
 
     const concurrencyFactor: number = +(
-      averagePowerDemand / theoriticalMaxPowerDemand
+      (averagePowerDemand / theoriticalMaxPowerDemand) * 100
     ).toFixed(2);
 
     const output: SimulationResultDto = {
