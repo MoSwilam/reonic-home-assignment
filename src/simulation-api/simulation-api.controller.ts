@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
 } from '@nestjs/common';
 import { SimulationApiService } from './simulation-api.service';
 import {
@@ -20,6 +21,7 @@ import {
 import { SimulationResponseDto } from '../common/dto/simulation.response.dto';
 import { SimulationInputDocument } from './schemas/simulation-input.schema';
 import { SimulationOutput } from './schemas/simulation-output.schema';
+import { InputValidationInterceptor } from 'src/common/input-validation/input-validation.interceptor';
 
 @ApiTags('Simulation API')
 @Controller('api/simulation')
@@ -28,6 +30,7 @@ export class SimulationApiController {
 
   @Post('/create')
   @ApiOperation({ summary: 'Run simulation with custom input parameters' })
+  @UseInterceptors(InputValidationInterceptor)
   create(
     @Body() createSimulationApiDto: SimulationInputDto,
   ): Promise<SimulationResponseDto> {

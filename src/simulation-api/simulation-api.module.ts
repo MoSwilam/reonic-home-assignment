@@ -6,7 +6,7 @@ import {
   SimulationInput,
   SimulationInputSchema,
 } from './schemas/simulation-input.schema';
-import { SimulationLogicModule } from 'src/simulation-logic/simulation-logic.module';
+import { SimulationModule } from 'src/simulation/simulation.module';
 import {
   SimulationOutput,
   SimulationOutputSchema,
@@ -14,7 +14,7 @@ import {
 
 @Module({
   imports: [
-    SimulationLogicModule,
+    SimulationModule,
     MongooseModule.forFeature([
       { name: SimulationInput.name, schema: SimulationInputSchema },
       { name: SimulationOutput.name, schema: SimulationOutputSchema },

@@ -1,12 +1,12 @@
 import { Controller, Get } from '@nestjs/common';
-import { SimulationLogicService } from './simulation-logic.service';
+import { SimulationService } from './simulation.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SimulationOutput } from 'src/simulation-api/schemas/simulation-output.schema';
 
 @ApiTags('Mock Simulation')
 @Controller('simulation')
-export class SimulationLogicController {
-  constructor(private readonly simulationService: SimulationLogicService) {}
+export class SimulationController {
+  constructor(private readonly simulationService: SimulationService) {}
 
   @Get('/mock/run')
   @ApiOperation({

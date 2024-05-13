@@ -1,5 +1,5 @@
 import { ConfigurableModuleBuilder, Module } from '@nestjs/common';
-import { SimulationLogicModule } from './simulation-logic/simulation-logic.module';
+import { SimulationModule } from './simulation/simulation.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SimulationApiModule } from './simulation-api/simulation-api.module';
 import * as Joi from 'joi';
@@ -7,7 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
-    SimulationLogicModule,
+    SimulationModule,
     SimulationApiModule,
     ConfigModule.forRoot({
       isGlobal: true,

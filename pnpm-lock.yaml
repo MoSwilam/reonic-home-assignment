@@ -35,6 +35,9 @@ importers:
       class-validator:
         specifier: ^0.14.1
         version: 0.14.1
+      decimal.js:
+        specifier: 10.0.0
+        version: 10.0.0
       joi:
         specifier: ^17.13.1
         version: 17.13.1
@@ -1233,6 +1236,9 @@ packages:
     peerDependenciesMeta:
       supports-color:
         optional: true
+
+  decimal.js@10.0.0:
+    resolution: {integrity: sha512-oTJ6FdBXq28TSDB/e0CfuXWxZE1+Jj3vV9+6eL73d+YpryRqD/+R4O5kAmZjNHiL2zw9lXrnZR8NhJtualzufg==}
 
   dedent@1.5.3:
     resolution: {integrity: sha512-NHQtfOOW68WD8lgypbLA5oT+Bt0xXJhiYvoR6SmmNXZfpzOGXwdKWmcwG8N7PwVVWV3eF/68nmD9BaJSsTBhyQ==}
@@ -4371,6 +4377,8 @@ snapshots:
   debug@4.3.4:
     dependencies:
       ms: 2.1.2
+
+  decimal.js@10.0.0: {}
 
   dedent@1.5.3: {}
 

@@ -1,4 +1,4 @@
-import { IChargingDemand, ITimeInterval } from './simulation-logic.types';
+import { IChargingDemand, ITimeInterval } from './simulation.types';
 
 export const simplifiedArrivalProbability: ITimeInterval[] = [
   { period: '00:00 - 01:00', probability: 0.94 },

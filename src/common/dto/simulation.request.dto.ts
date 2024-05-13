@@ -1,17 +1,9 @@
 import {
-  ApiBody,
-  ApiHideProperty,
-  ApiProperty,
   PartialType,
 } from '@nestjs/swagger';
 import {
-  IsNotEmpty,
   IsNumber,
-  IsString,
-  Max,
-  MaxLength,
 } from 'class-validator';
-import { Types } from 'mongoose';
 import { AbstractDocument } from 'src/common/abstract.schema';
 
 export class SimulationInputDto extends AbstractDocument {
@@ -19,7 +11,6 @@ export class SimulationInputDto extends AbstractDocument {
   numberOfChargePoints: number;
 
   @IsNumber()
-  @MaxLength(200)
   arrivalProbabilityMultiplier: number;
 
   @IsNumber()
