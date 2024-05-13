@@ -1,13 +1,30 @@
 # Introduction
-Hey there,
 This readme file provides a comprehensive guide to understanding,
 running, and testing the Electric Vehicle (EV) Charging Simulation application.
 
-P.S. This test task wasn't that complex, but hey, gotta keep things interesting, right? 😜
+# Ready functionality:
+- Simulation Logic
+- Simulation API
+
+<br>
+
+# Bonus Features:
+- Dockerized setup for streamlined development environment.
+- Swagger UI implementation for convenient API exploration.
+- Modular architecture and linking simulation logic with the API for enhanced code reusability.
+- Global request logging
+
+<br>
+
+I could do the FrontEnd task as well but I figured it will take me probably another day or two and I thought not to delay the submission further.
+
+P.S. The task wasn't that complex, but hey, gotta keep things interesting, right? 😜
+
 
 ## Prerequisites 
 Before running this app, make sure Docker and Node.JS are both installed on your system.
 <br>
+
 
 ## Running the app
 
@@ -69,11 +86,14 @@ Once the app is running, navigate to localhost:3000/api-doc to explore the avail
 
 <br>
 
-# Bonus Features:
-- Dockerized setup for streamlined development environment.
-- Swagger UI implementation for convenient API exploration.
-- Modular architecture for enhanced code reusability.
-- Global request logging
+# Important Note: 
+The dev branch has the simulation calculations implemented in native JS, which may occasionally yield inaccuracies when handling decimals of significant precision. after extensive testing, the anticipated concurrency factor, as specified in the task ( 33% - 55% ), falls slightly below expectations, at around 32%.
+
+When I integrated a specialized library for high-precision calculations like Decimal.JS, the concurrency factor results appear to be more optimal. However, it's worth noting that I observed a slightly longer execution time for requests and returning results.
+
+Therefore, I've made both solutions available for testing purposes. You can find the native JS solution in the dev branch, and the implementation using Decimal.JS is available in a separate branch named `feature/use-decimal-js-for-calculations`.
 
 
-Happy Review!
+Thanks
+
+Happy review!
