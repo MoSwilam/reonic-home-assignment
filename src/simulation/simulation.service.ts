@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { chargingDemands, evArrivalProbabilities } from './data';
 import { IChargePoint, SimulationOptions, SimulationResultDto } from './simulation.types';
 import { SimulationOutput } from 'src/simulation-api/schemas/simulation-output.schema';
@@ -145,7 +145,6 @@ export class SimulationService {
     return chargingDemands[selectedDemandIndex].kmRange;
   }
 
-  
   getArrivalProbabilityBasedOnData(intervalIndex: number): number {
     const intervalsPerHour = 4;
     const hourIndex = Math.floor(intervalIndex / intervalsPerHour); // Determine which hour the interval belongs to
@@ -164,10 +163,8 @@ export class SimulationService {
       payload.arrivalProbabilityMultiplier > 0
     ) {
       arrivalProbability = +(payload.arrivalProbabilityMultiplier / 100 / 100).toFixed(2);
-      // console.log({ arrivalProbability, location: 'payload' });
     } else {
       arrivalProbability = this.getArrivalProbabilityBasedOnData(intervalIndex);
-      // console.log({ arrivalProbability, location: 'data' });
     }
 
     return arrivalProbability;

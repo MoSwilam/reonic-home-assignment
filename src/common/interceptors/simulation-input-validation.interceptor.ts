@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { SimulationInputDto } from '../dto/simulation.request.dto';
 
 @Injectable()
-export class InputValidationInterceptor implements NestInterceptor {
+export class SimulationInputValidationInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const request = context.switchToHttp().getRequest();
     const payload: SimulationInputDto = request.body;
@@ -27,12 +27,6 @@ export class InputValidationInterceptor implements NestInterceptor {
         `Invalid value provided for 'arrivalProbabilityMultiplier'. It must be a positive number between 0 - 200.`,
       );
     }
-
-
-    if (!Number.isInteger(multiplier)) {
-      console.log({ multiplier: payload.arrivalProbabilityMultiplier });
-    }
-
 
     return next.handle();
   }

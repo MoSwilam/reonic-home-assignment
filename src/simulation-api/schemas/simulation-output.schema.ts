@@ -1,7 +1,7 @@
 // outputs.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { AbstractDocument } from 'src/common/abstract.schema';
+import { AbstractDocument } from '../../common/abstract.schema';
 
 export type SimulationOutputDocument = SimulationOutput & Document;
 

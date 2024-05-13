@@ -73,6 +73,7 @@ Once the app is running, navigate to localhost:3000/api-doc to explore the avail
 - Dockerized setup for streamlined development environment.
 - Swagger UI implementation for convenient API exploration.
 - Modular architecture for enhanced code reusability.
+- Global request logging
 
 
 Happy Review!

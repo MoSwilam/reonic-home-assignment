@@ -21,7 +21,7 @@ import {
 import { SimulationResponseDto } from '../common/dto/simulation.response.dto';
 import { SimulationInputDocument } from './schemas/simulation-input.schema';
 import { SimulationOutput } from './schemas/simulation-output.schema';
-import { InputValidationInterceptor } from 'src/common/input-validation/input-validation.interceptor';
+import { SimulationInputValidationInterceptor } from 'src/common/interceptors/simulation-input-validation.interceptor';
 
 @ApiTags('Simulation API')
 @Controller('api/simulation')
@@ -30,7 +30,7 @@ export class SimulationApiController {
 
   @Post('/create')
   @ApiOperation({ summary: 'Run simulation with custom input parameters' })
-  @UseInterceptors(InputValidationInterceptor)
+  @UseInterceptors(SimulationInputValidationInterceptor)
   create(
     @Body() createSimulationApiDto: SimulationInputDto,
   ): Promise<SimulationResponseDto> {
