@@ -1,6 +1,8 @@
+import Decimal from "decimal.js";
+
 export interface IChargePoint {
   occupied: boolean;
-  energyNeeded: number;
+  energyNeeded: number | Decimal;
 }
 
 export enum IMeasurementUnit {

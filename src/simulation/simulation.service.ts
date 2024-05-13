@@ -1,8 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { chargingDemands, evArrivalProbabilities } from './data';
 import { IChargePoint, SimulationOptions, SimulationResultDto } from './simulation.types';
 import { SimulationOutput } from 'src/simulation-api/schemas/simulation-output.schema';
 import { SimulationInputDto } from 'src/common/dto/simulation.request.dto';
+import Decimal from 'decimal.js';
 
 @Injectable()
 export class SimulationService {
@@ -30,7 +31,6 @@ export class SimulationService {
     };
   }
 
- 
   runSimulation(payload?: SimulationInputDto): Omit<SimulationOutput, '_id'> {
     const {
       numberOfChargePoints,
@@ -40,82 +40,79 @@ export class SimulationService {
       numberOfIntevals: oneYear15MinutesInterval, // renaming for clarity
     } = this.getSimulationOptions(payload);
 
-    let totalEnergyConsumed = 0;
-    let maxPowerDemand = 0; // To track the highest power demand at any interval
-    let totalPowerDemand = 0; // To calculate average power demand
+    let totalEnergyConsumed = new Decimal(0);
+    let maxPowerDemand = new Decimal(0); // To track the highest power demand at any interval
+    let totalPowerDemand = new Decimal(0); // To calculate average power demand
 
     /** init chargingPoints */
     const chargepoints: IChargePoint[] = Array.from(
       { length: numberOfChargePoints },
       () => ({
         occupied: false,
-        energyNeeded: 0,
+        energyNeeded: new Decimal(0),
       }),
     );
 
+    let i = 0
+    while (i < 15) {
+      const customProbability: Decimal = new Decimal(this.getArrivalProbability(i, payload));
+      console.log({ customProbability: customProbability.toNumber(), randomNumber: Math.random() });
+      i++;
+    }
+
     for (let i = 0; i < oneYear15MinutesInterval; i++) {
-      let intervalPowerDemand = 0;
+      let intervalPowerDemand = new Decimal(0);
       for (const chargepoint of chargepoints) {
 
-        const arrivalProbability: number = this.getArrivalProbability(i, payload);
+        const arrivalProbability: Decimal = new Decimal(this.getArrivalProbability(i, payload));
 
         /** Simulating the arrival of an EV */
-        if (!chargepoint.occupied && Math.random() < arrivalProbability) {
+        if (!chargepoint.occupied && Math.random() < arrivalProbability.toNumber()) {
           chargepoint.occupied = true;
-          const chargingDemand = this.selectChargingDemandBasedOnProbability();
+          const chargingDemand = new Decimal(this.selectChargingDemandBasedOnProbability());
           const kmRange = chargingDemand;
 
           /** Convert km range to energy needed in kWh */
-          chargepoint.energyNeeded = +(
-            (kmRange / 100) *
-            evConsumptionKwhPer100Km
-          ).toFixed(2);
+          chargepoint.energyNeeded = kmRange.dividedBy(100).times(evConsumptionKwhPer100Km).toNumber();
         }
 
         /** Simulating the charging process */
         if (chargepoint.occupied) {
           const energyProvidedThisInterval: number =
-            chargingPowerPerChargePointKw * intervalDurationHours;
+          chargingPowerPerChargePointKw * intervalDurationHours;
 
-          chargepoint.energyNeeded -= energyProvidedThisInterval;
-          intervalPowerDemand += chargingPowerPerChargePointKw;
+          chargepoint.energyNeeded = +(chargepoint.energyNeeded) - energyProvidedThisInterval;
+          intervalPowerDemand = intervalPowerDemand.plus(chargingPowerPerChargePointKw);
 
           /** Check if charging is complete */
-          if (chargepoint.energyNeeded <= 0) {
+          if (new Decimal(chargepoint.energyNeeded).lte(0)) {
             chargepoint.occupied = false;
           }
         }
 
         /** Calculate the total energy consumed and the maximum power demand */
-        totalEnergyConsumed += intervalPowerDemand * intervalDurationHours;
-        totalPowerDemand += intervalPowerDemand;
-        if (intervalPowerDemand > maxPowerDemand) {
+        totalEnergyConsumed = totalEnergyConsumed.plus(intervalPowerDemand.times(intervalDurationHours));
+        totalPowerDemand = totalPowerDemand.plus(intervalPowerDemand);
+        if (intervalPowerDemand.gt(maxPowerDemand)) {
           maxPowerDemand = intervalPowerDemand;
         }
       }
     }
 
-    /** Calculate theoritical max power demand and concurrency factor */
-    const theoriticalMaxPowerDemand: number =
-      chargingPowerPerChargePointKw * numberOfChargePoints;
-
-    const averagePowerDemand: number =
-      totalPowerDemand / oneYear15MinutesInterval;
-
-    const concurrencyFactor: number = +(
-      (averagePowerDemand / theoriticalMaxPowerDemand) * 100
-    ).toFixed(2);
+    /** Calculate theoretical max power demand and concurrency factor */
+    const theoriticalMaxPowerDemand: Decimal = new Decimal(chargingPowerPerChargePointKw).times(numberOfChargePoints);
+    const averagePowerDemand: Decimal = totalPowerDemand.dividedBy(oneYear15MinutesInterval);
+    const concurrencyFactor: number = +averagePowerDemand.dividedBy(theoriticalMaxPowerDemand).times(100).toFixed(2);
 
     const output: SimulationResultDto = {
-      theoriticalMaxPowerDemand: theoriticalMaxPowerDemand,
-      actualMaxPowerDemand: maxPowerDemand,
-      totalEnergyConsumed: totalEnergyConsumed,
+      theoriticalMaxPowerDemand: theoriticalMaxPowerDemand.toNumber(),
+      actualMaxPowerDemand: maxPowerDemand.toNumber(),
+      totalEnergyConsumed: totalEnergyConsumed.toNumber(),
       concurrencyFactor: concurrencyFactor,
     };
 
     return output;
   }
-
 
   selectChargingDemandBasedOnProbability(): number {
     // Normalize probabilities to sum to 1 (if they do not already)
@@ -145,17 +142,15 @@ export class SimulationService {
     return chargingDemands[selectedDemandIndex].kmRange;
   }
 
-  
   getArrivalProbabilityBasedOnData(intervalIndex: number): number {
     const intervalsPerHour = 4;
     const hourIndex = Math.floor(intervalIndex / intervalsPerHour); // Determine which hour the interval belongs to
     const hourProbability = evArrivalProbabilities[hourIndex % 24].probability;
     const probability = hourProbability / intervalsPerHour;
-    const decimalProbability = +(probability / 100).toFixed(2); // convert it to decimal to compare it with Math.random()
+    const decimalProbability = new Decimal(probability / 100).toNumber(); // convert it to decimal to compare it with Math.random()
     return decimalProbability;
   }
 
- 
   getArrivalProbability(intervalIndex: number, payload?: SimulationInputDto): number {
     let arrivalProbability: number;
     if (
@@ -163,11 +158,10 @@ export class SimulationService {
       payload.arrivalProbabilityMultiplier &&
       payload.arrivalProbabilityMultiplier > 0
     ) {
-      arrivalProbability = +(payload.arrivalProbabilityMultiplier / 100 / 100).toFixed(2);
-      // console.log({ arrivalProbability, location: 'payload' });
+      arrivalProbability = new Decimal(payload.arrivalProbabilityMultiplier).dividedBy(100).toNumber();
+
     } else {
       arrivalProbability = this.getArrivalProbabilityBasedOnData(intervalIndex);
-      // console.log({ arrivalProbability, location: 'data' });
     }
 
     return arrivalProbability;
