@@ -10,23 +10,31 @@ import {
 } from '@nestjs/common';
 import { SimulationApiService } from './simulation-api.service';
 import {
-  SimulationInputDto,
-  UpdateSimulationApiDto,
-} from '../common/dto/simulation.request.dto';
-import {
   ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { SimulationResponseDto } from '../common/dto/simulation.response.dto';
-import { SimulationInputDocument } from './schemas/simulation-input.schema';
-import { SimulationOutput } from './schemas/simulation-output.schema';
 import { SimulationInputValidationInterceptor } from 'src/common/interceptors/simulation-input-validation.interceptor';
+import { SimulationInputDto } from 'src/common/dto/simulation.request.dto';
+import { SimulationResponseDto } from './dto/simulation.response.dto';
+import { SimulationOutput } from './schemas/simulation-output.schema';
+import { SimulationInputDocument } from './schemas/simulation-input.schema';
+import { UpdateSimulationApiDto } from './dto/simulation.request.dto';
+import { SimulationService } from './simulation.service';
 
 @ApiTags('Simulation API')
 @Controller('api/simulation')
 export class SimulationApiController {
-  constructor(private readonly simulationApiService: SimulationApiService) {}
+  constructor(
+    private readonly simulationApiService: SimulationApiService,
+    private readonly simulationService: SimulationService
+  ) {}
+
+  @Get('/mock/run')
+  @ApiOperation({ summary: 'Mock Simulation with default params' })
+  mockSimulation(): Omit<SimulationOutput, '_id'> {
+    return this.simulationService.runSimulation();
+  }
 
   @Post('/create')
   @ApiOperation({ summary: 'Run simulation with custom input parameters' })

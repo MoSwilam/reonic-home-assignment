@@ -1,7 +1,7 @@
 import { ConfigurableModuleBuilder, Module } from '@nestjs/common';
-import { SimulationModule } from './simulation/simulation.module';
+import { SimulationModule } from '../apps/simulation/simulation.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { SimulationApiModule } from './simulation-api/simulation-api.module';
+import { SimulationApiModule } from '../apps/simulation/simulation-api.module';
 import * as Joi from 'joi';
 import { MongooseModule } from '@nestjs/mongoose';
 import { APP_INTERCEPTOR } from '@nestjs/core';

@@ -1,7 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { AbstractDocument } from '../../common/abstract.schema';
+
 import { SimulationOutput } from './simulation-output.schema';
+import { AbstractDocument } from '@app/common';
 
 export type SimulationInputDocument = SimulationInput & Document;
 

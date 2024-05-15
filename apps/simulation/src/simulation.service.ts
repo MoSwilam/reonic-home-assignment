@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { chargingDemands, evArrivalProbabilities } from './data';
-import { IChargePoint, SimulationOptions, SimulationResultDto } from './simulation.types';
-import { SimulationOutput } from 'src/simulation-api/schemas/simulation-output.schema';
 import { SimulationInputDto } from 'src/common/dto/simulation.request.dto';
+import { IChargePoint, SimulationOptions, SimulationResultDto } from './types';
+import { SimulationOutput } from './schemas/simulation-output.schema';
 
 @Injectable()
 export class SimulationService {

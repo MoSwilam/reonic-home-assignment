@@ -1,19 +1,20 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { SimulationInput, SimulationInputDocument } from './schemas/simulation-input.schema';
-import { SimulationInputDto, UpdateSimulationApiDto } from '../common/dto/simulation.request.dto';
+import { SimulationInputDocument } from './schemas/simulation-input.schema';
+import { SimulationOutput } from './schemas/simulation-output.schema';
+import { SimulationInputDto, UpdateSimulationApiDto } from './dto/simulation.request.dto';
+import { SimulationResponseDto } from './dto/simulation.response.dto';
+import { SimulationService } from './simulation.service';
+import { SimulationInputRepository } from './repositories/simulation-input.repository';
+import { SimulationOutputRepository } from './repositories/simulation-output.repository';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { SimulationService } from '../simulation/simulation.service';
-import { SimulationResponseDto } from '../common/dto/simulation.response.dto';
-import { SimulationOutput, SimulationOutputDocument } from './schemas/simulation-output.schema';
 
 @Injectable()
 export class SimulationApiService {
   constructor(
-    @InjectModel(SimulationInput.name)
-    private simulationInputModel: Model<SimulationInputDocument>,
-    @InjectModel(SimulationOutput.name)
-    private simulationOutputModel: Model<SimulationOutputDocument>,
+    private simulationInputRepository: SimulationInputRepository,
+    private simulationOutputRepository: SimulationOutputRepository,
+    @InjectModel('SimulationInput') private simulationInputModel: Model<SimulationInputDocument>,
     private simulationService: SimulationService,
   ) {}
 
@@ -21,10 +22,10 @@ export class SimulationApiService {
     const simulationResult = this.simulationService.runSimulation(payload);
     if (!simulationResult) throw new BadRequestException('Simulation failed');
 
-    const simualationDoc = await this.simulationOutputModel.create(simulationResult);
+    const simualationDoc = await this.simulationOutputRepository.create(simulationResult);
     if (!simualationDoc) throw new BadRequestException('Error while saving simulation output');
 
-    const simulationInputAndOutput = (await this.simulationInputModel.create({...payload,output: simualationDoc._id,})).populate('output');
+    const simulationInputAndOutput = (await this.simulationInputRepository.create({...payload, output: simualationDoc._id,})).populate('output');
     if (!simulationInputAndOutput) throw new BadRequestException('Error while saving simulation input and output');
 
     return simulationInputAndOutput;
