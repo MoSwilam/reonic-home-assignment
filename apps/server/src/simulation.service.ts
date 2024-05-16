@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { chargingDemands, evArrivalProbabilities } from './data';
-import { SimulationInputDto } from 'src/common/dto/simulation.request.dto';
+import { SimulationInputDto } from '@app/common';
 import { IChargePoint, SimulationOptions, SimulationResultDto } from './types';
 import { SimulationOutput } from './schemas/simulation-output.schema';
 

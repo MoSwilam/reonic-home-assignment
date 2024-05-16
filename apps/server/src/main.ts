@@ -8,8 +8,11 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = configService.getOrThrow('PORT');
 
+  app.enableCors();
+
   const options = new DocumentBuilder()
     .addBearerAuth()
+    .setBasePath('api')
     .setTitle('Reonic Simulation API')
     .setDescription('Reonic Simulation API documentation')
     .setVersion('1.0')
