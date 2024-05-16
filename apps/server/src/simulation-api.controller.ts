@@ -14,13 +14,12 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { SimulationInputValidationInterceptor } from 'src/common/interceptors/simulation-input-validation.interceptor';
-import { SimulationInputDto } from 'src/common/dto/simulation.request.dto';
 import { SimulationResponseDto } from '../../../libs/common/src/dto/simulation.response.dto';
 import { SimulationOutput } from './schemas/simulation-output.schema';
 import { SimulationInputDocument } from './schemas/simulation-input.schema';
-import { UpdateSimulationApiDto } from '../../../libs/common/src/dto/simulation.request.dto';
+import { SimulationInputDto, UpdateSimulationApiDto } from '@app/common';
 import { SimulationService } from './simulation.service';
+import { SimulationInputValidationInterceptor } from '@app/common';
 
 @ApiTags('Simulation API')
 @Controller('api/simulation')

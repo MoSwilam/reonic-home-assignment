@@ -35,7 +35,7 @@
     },
     "simulation": {
       "type": "application",
-      "root": "apps/simulation",
+      "root": "apps/server",
       "entryFile": "main",
       "sourceRoot": "apps/server/src",
       "compilerOptions": {
