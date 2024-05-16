@@ -16,10 +16,10 @@ import {
 } from '@nestjs/swagger';
 import { SimulationInputValidationInterceptor } from 'src/common/interceptors/simulation-input-validation.interceptor';
 import { SimulationInputDto } from 'src/common/dto/simulation.request.dto';
-import { SimulationResponseDto } from './dto/simulation.response.dto';
+import { SimulationResponseDto } from '../../../libs/common/src/dto/simulation.response.dto';
 import { SimulationOutput } from './schemas/simulation-output.schema';
 import { SimulationInputDocument } from './schemas/simulation-input.schema';
-import { UpdateSimulationApiDto } from './dto/simulation.request.dto';
+import { UpdateSimulationApiDto } from '../../../libs/common/src/dto/simulation.request.dto';
 import { SimulationService } from './simulation.service';
 
 @ApiTags('Simulation API')

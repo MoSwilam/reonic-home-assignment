@@ -5,7 +5,7 @@ services:
       dockerfile: ./Dockerfile
     command: pnpm run start:dev
     env_file:
-      - apps/simulation/.env
+      - apps/server/.env
     ports:
       - '3000:3000'
     volumes:

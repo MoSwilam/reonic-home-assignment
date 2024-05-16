@@ -1,11 +1,12 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { SimulationInput, SimulationInputDocument } from './schemas/simulation-input.schema';
 import { SimulationOutput, SimulationOutputDocument } from './schemas/simulation-output.schema';
-import { SimulationInputDto, UpdateSimulationApiDto } from './dto/simulation.request.dto';
-import { SimulationResponseDto } from './dto/simulation.response.dto';
+import { SimulationInputDto, UpdateSimulationApiDto } from '../../../libs/common/src/dto/simulation.request.dto';
+import { SimulationResponseDto } from '../../../libs/common/src/dto/simulation.response.dto';
 import { SimulationService } from './simulation.service';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { response } from 'express';
 
 @Injectable()
 export class SimulationApiService {
@@ -24,10 +25,15 @@ export class SimulationApiService {
     const simualationDoc = await this.simulationOutputModel.create(simulationResult);
     if (!simualationDoc) throw new BadRequestException('Error while saving simulation output');
 
-    const simulationInputAndOutput = (await this.simulationInputModel.create({...payload,output: simualationDoc._id,})).populate('output');
+    const simulationInputAndOutput = (await this.simulationInputModel.create({...payload,output: simualationDoc._id,}));
     if (!simulationInputAndOutput) throw new BadRequestException('Error while saving simulation input and output');
 
-    return simulationInputAndOutput;
+    const response: SimulationResponseDto = {
+      input: simulationInputAndOutput,
+      output: simualationDoc,
+    };
+    
+    return response;
   }
 
   async findByIdOrThrow(id: string): Promise<SimulationInputDocument> {

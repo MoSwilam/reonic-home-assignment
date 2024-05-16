@@ -19,7 +19,7 @@ import { SimulationService } from './simulation.service';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: './apps/simulation/.env',
+      envFilePath: 'apps/server/.env',
       validationSchema: Joi.object({
         PORT: Joi.string().required(),
         SWAGGER_URI: Joi.string().required(),

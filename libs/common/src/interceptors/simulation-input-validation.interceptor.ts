@@ -1,6 +1,6 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor, BadRequestException } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { SimulationInputDto } from '../../../../apps/simulation/src/dto/simulation.request.dto';
+import { SimulationInputDto } from '../dto/simulation.request.dto';
 
 @Injectable()
 export class SimulationInputValidationInterceptor implements NestInterceptor {
