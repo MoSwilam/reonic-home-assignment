@@ -14,7 +14,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { SimulationResponseDto } from '../../../libs/common/src/dto/simulation.response.dto';
+import { SimulationResponseDto } from '@app/common';
 import { SimulationOutput } from './schemas/simulation-output.schema';
 import { SimulationInputDocument } from './schemas/simulation-input.schema';
 import { SimulationInputDto, UpdateSimulationApiDto } from '@app/common';

@@ -1,12 +1,11 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { SimulationInput, SimulationInputDocument } from './schemas/simulation-input.schema';
 import { SimulationOutput, SimulationOutputDocument } from './schemas/simulation-output.schema';
-import { SimulationInputDto, UpdateSimulationApiDto } from '../../../libs/common/src/dto/simulation.request.dto';
-import { SimulationResponseDto } from '../../../libs/common/src/dto/simulation.response.dto';
+import { SimulationInputDto, UpdateSimulationApiDto } from '@app/common';
+import { SimulationResponseDto } from '@app/common';
 import { SimulationService } from './simulation.service';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { response } from 'express';
 
 @Injectable()
 export class SimulationApiService {

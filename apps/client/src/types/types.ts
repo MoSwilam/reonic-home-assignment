@@ -5,3 +5,12 @@ export interface SimulationResult {
   totalEnergyConsumed: number;
   concurrencyFactor: number;
 }
+
+export const apiUrl = 'http://localhost:3010/api';
+
+export interface SimulationInputDto {
+  numberOfChargePoints: number | string;
+  arrivalProbabilityMultiplier: number | string;
+  evConsumptionKwhPer100Km: number | string;
+  chargingPowerPerChargePointKw: number | string;
+}

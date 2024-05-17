@@ -1,11 +1,9 @@
 import axios from 'axios';
-import { SimulationResult } from 'types/types';
-
-console.log('API URL:', process.env.REACT_APP_API_URL);
+import { SimulationInputDto, SimulationResult, apiUrl } from 'types/types';
 
 // Set the base URL for axios
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api'
+  baseURL: apiUrl
 });
 
 // Define API functions
@@ -14,7 +12,7 @@ export const getSimulation = async (): Promise<SimulationResult> => {
   return response;
 };
 
-export const createSimulation = async (simulation: SimulationResult): Promise<SimulationResult> => {
-  const response = await api.post('/simulation', simulation);
-  return response.data;
+export const createSimulation = async (simulation: SimulationInputDto): Promise<SimulationResult> => {
+  const response = await api.post('/simulation/create', simulation);
+  return response.data.output;
 };
