@@ -14,12 +14,11 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { SimulationResponseDto } from '@app/common';
 import { SimulationOutput } from './schemas/simulation-output.schema';
 import { SimulationInputDocument } from './schemas/simulation-input.schema';
-import { SimulationInputDto, UpdateSimulationApiDto } from '@app/common';
 import { SimulationService } from './simulation.service';
-import { SimulationInputValidationInterceptor } from '@app/common';
+import { SimulationInputDto, UpdateSimulationApiDto, SimulationResponseDto, SimulationInputValidationInterceptor } from '@reonic/common';
+
 
 @ApiTags('Simulation API')
 @Controller('api/simulation')

@@ -1,4 +1,4 @@
-import { AbstractDocument, AbstractRepository } from '@app/common';
+import { AbstractDocument, AbstractRepository } from '@reonic/common';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';

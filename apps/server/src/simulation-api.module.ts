@@ -12,7 +12,7 @@ import {
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import *  as Joi from 'joi';
-import { DatabaseModule, LoggingInterceptor } from '@app/common';
+import { DatabaseModule, LoggingInterceptor } from '@reonic/common';
 import { SimulationService } from './simulation.service';
 
 @Module({

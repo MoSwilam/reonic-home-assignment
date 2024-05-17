@@ -1,4 +1,4 @@
-import { AbstractDocument } from '@app/common';
+import { AbstractDocument } from '@reonic/common';
 import {
   PartialType,
 } from '@nestjs/swagger';

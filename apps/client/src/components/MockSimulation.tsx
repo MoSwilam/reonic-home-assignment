@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { getSimulation } from '../api/simulationApi';
 import { SimulationResult } from '../types/types';
-import { SimulationInputDto } from '@app/common';
 
 const MockSimulation = () => {
   const [simulation, setSimulation] = useState<SimulationResult | null>(null);

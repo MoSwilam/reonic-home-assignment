@@ -80,7 +80,7 @@
       "<rootDir>/apps/"
     ],
     "moduleNameMapper": {
-      "^@app/common(|/.*)$": "<rootDir>/libs/common/src/$1"
+      "^@reonic/common(|/.*)$": "<rootDir>/libs/common/src/$1"
     }
   }
 }

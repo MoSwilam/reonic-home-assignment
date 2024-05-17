@@ -1,8 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { SimulationInput, SimulationInputDocument } from './schemas/simulation-input.schema';
 import { SimulationOutput, SimulationOutputDocument } from './schemas/simulation-output.schema';
-import { SimulationInputDto, UpdateSimulationApiDto } from '@app/common';
-import { SimulationResponseDto } from '@app/common';
+import { SimulationInputDto, UpdateSimulationApiDto, SimulationResponseDto } from '@reonic/common';
 import { SimulationService } from './simulation.service';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';

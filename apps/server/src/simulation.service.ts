@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { chargingDemands, evArrivalProbabilities } from './data';
-import { SimulationInputDto } from '@app/common';
+import { SimulationInputDto } from '@reonic/common';
 import { IChargePoint, SimulationOptions, SimulationResultDto } from './types';
 import { SimulationOutput } from './schemas/simulation-output.schema';
 
@@ -31,6 +31,10 @@ export class SimulationService {
   }
 
  
+  /**
+   * Runs the simulation for one year and calculates the total energy consumed, maximum power demand, and concurrency factor.
+   * @returns An object containing the results of the simulation.
+   */
   runSimulation(payload?: SimulationInputDto): Omit<SimulationOutput, '_id'> {
     const {
       numberOfChargePoints,
@@ -117,6 +121,10 @@ export class SimulationService {
   }
 
 
+  /**
+   * Selects a charging demand based on the probability of each demand.
+   * @returns The number of kilometers of range to be added to the EV.
+   */
   selectChargingDemandBasedOnProbability(): number {
     // Normalize probabilities to sum to 1 (if they do not already)
     const totalProbability = chargingDemands.reduce(
@@ -145,16 +153,27 @@ export class SimulationService {
     return chargingDemands[selectedDemandIndex].kmRange;
   }
 
+  /**
+   * Converts a 15-minute interval index into an hourly index and retrieves the arrival probability.
+   * @param intervalIndex The index of the current 15-minute interval (0 to 35039)
+   * @returns The probability of an EV arrival during the interval.
+   */
   getArrivalProbabilityBasedOnData(intervalIndex: number): number {
     const intervalsPerHour = 4;
     const hourIndex = Math.floor(intervalIndex / intervalsPerHour); // Determine which hour the interval belongs to
-    const hourProbability = evArrivalProbabilities[hourIndex % 24].probability;
+    const hourProbability = evArrivalProbabilities[hourIndex % 24].probability; // Use the probability for the corresponding hour
     const probability = hourProbability / intervalsPerHour;
     const decimalProbability = +(probability / 100).toFixed(2); // convert it to decimal to compare it with Math.random()
     return decimalProbability;
   }
 
  
+  /**
+   * Checks the payload for an arrival probability multiplier, if it exists, returns the arrival probability, otherwise, calculates it based on the data.
+   * @param intervalIndex The index of the current 15-minute interval (0 to 35039)
+   * @param payload The payload containing the arrival probability multiplier.
+   * @returns The probability of an EV arrival during the interval.
+   */
   getArrivalProbability(intervalIndex: number, payload?: SimulationInputDto): number {
     let arrivalProbability: number;
     if (

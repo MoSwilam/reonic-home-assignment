@@ -18,12 +18,9 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@app/common": [
+      "@reonic/common": [
         "libs/common/src"
       ],
-      "@app/common/*": [
-        "libs/common/src/*"
-      ]
     }
   }
 }

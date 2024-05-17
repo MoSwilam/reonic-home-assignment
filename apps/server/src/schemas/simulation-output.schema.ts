@@ -1,5 +1,5 @@
 // outputs.schema.ts
-import { AbstractDocument } from '@app/common';
+import { AbstractDocument } from '@reonic/common';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
