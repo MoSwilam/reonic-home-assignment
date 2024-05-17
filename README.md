@@ -39,7 +39,7 @@ Run client and server apps
 ```bash
 make run
 ```
-This command does the following
+This command does the following:
 - Downloads Mongo image and run it
 - Build and run the server app
 - Run the client app
@@ -55,7 +55,7 @@ localhost:3000/
 and you can access API documentation UI at:
 
 ```bash
-localhost:3000/api-doc
+localhost:3010/api-doc
 ```
 <br>
 <br>
@@ -79,11 +79,11 @@ The API service interacts with the simulation-logic service, adapting its behavi
 1. GET `simulation/mock/run`: Runs the mock simulation using default params
 
 ### Simulation API
-1. POST `/create`: Executes a simulation with provided input parameters, storing the input and output data in separate collections in the database. It then returns both documents connected together for clarity and readability.
-2. GET `/all`: Retrieves all simulation input data entries.
-3. GET `/:id`: Retrieves a specific simulation input by ID.
-4. PATCH `/:id`: Updates a simulation input in the database.
-5. DELETE `/:id`: Deletes a simulation input from the database.
+1. POST `simulation/create`: Executes a simulation with provided input parameters, storing the input and output data in separate collections in the database. It then returns both documents connected together for clarity and readability.
+2. GET `simulation/all`: Retrieves all simulation input data entries.
+3. GET `simulation/:id`: Retrieves a specific simulation input by ID.
+4. PATCH `simulation/:id`: Updates a simulation input in the database.
+5. DELETE `simulation/:id`: Deletes a simulation input from the database.
 
 <br>
 
@@ -104,6 +104,5 @@ When I integrated a specialized library for high-precision calculations like Dec
 Therefore, I've made both solutions available for testing purposes. You can find the native JS solution in the dev branch, and the implementation using Decimal.JS is available in a separate branch named `feature/use-decimal-js-for-calculations`.
 
 
-Thanks
 
 Happy review!
