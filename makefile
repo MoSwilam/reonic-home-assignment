@@ -1,2 +1,2 @@
 dev:
-	pnpm run start:dev
+	pnpm run start:dev simulation
