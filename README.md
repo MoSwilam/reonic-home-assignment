@@ -34,6 +34,7 @@ Install dependencies
 make install
 ```
 
+Run client and server apps
 
 ```bash
 make run
