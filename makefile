@@ -1,2 +1,6 @@
-dev:
-	pnpm run start:dev simulation
+install:
+	yarn install
+	cd apps/client && yarn install
+
+run:
+	docker compose up
