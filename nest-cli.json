@@ -33,7 +33,7 @@
         "tsConfigPath": "libs/common/tsconfig.lib.json"
       }
     },
-    "simulation": {
+    "api": {
       "type": "application",
       "root": "apps/server",
       "entryFile": "main",

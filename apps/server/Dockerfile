@@ -1,20 +1,42 @@
-# Use an official Node.js image as a base
-FROM node:alpine
+FROM node:alpine as development
 
-# Set the working directory to /usr/src/app
+# Create the working directory
 WORKDIR /usr/src/app
 
-# Copy the package.json and yarn.lock files
-COPY package.json yarn.lock ./
+# Copy package.json and yarn.lock
+COPY package.json ./
+COPY yarn.lock ./
+
+# Copy configuration files
+COPY tsconfig.json ./tsconfig.json
+COPY nest-cli.json ./nest-cli.json
+
+# Copy the rest of the server application code
+COPY apps/server ./apps/server
+COPY libs ./libs
 
 # Install dependencies
 RUN yarn install
 
-# Copy the rest of the server application code
-COPY apps/server ./
+# Build the application
+RUN yarn run build
 
-# Expose the port the app runs on
-EXPOSE 3000
+FROM node:alpine as production
+
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+
+WORKDIR /usr/src/app
+
+COPY package.json ./
+
+# Install only production dependencies
+RUN yarn install --production
+
+COPY apps/server .
+
+# Copy the build output from the development stage
+COPY --from=development /usr/src/app/dist ./dist
 
 # Command to run the application
-CMD ["yarn", "start"]
+CMD ["node", "dist/apps/server/main"]

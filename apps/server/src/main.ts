@@ -8,7 +8,11 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = configService.getOrThrow('PORT');
 
-  app.enableCors();
+  app.enableCors({
+    origin: ['http://localhost:3001', 'http://localhost:3000'], // Allow all origins for simplicity. Adjust as needed.
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    optionsSuccessStatus: 204,
+  });
 
   const options = new DocumentBuilder()
     .addBearerAuth()
